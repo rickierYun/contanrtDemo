@@ -8,12 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		2F41554E1BDF477500215B67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41554D1BDF477500215B67 /* AppDelegate.swift */; };
-		2F4155501BDF477500215B67 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41554F1BDF477500215B67 /* ViewController.swift */; };
 		2F4155531BDF477500215B67 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F4155511BDF477500215B67 /* Main.storyboard */; };
 		2F4155551BDF477500215B67 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F4155541BDF477500215B67 /* Assets.xcassets */; };
 		2F4155581BDF477500215B67 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F4155561BDF477500215B67 /* LaunchScreen.storyboard */; };
 		2F4155631BDF477500215B67 /* ContanctDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4155621BDF477500215B67 /* ContanctDemoTests.swift */; };
 		2F41556E1BDF477500215B67 /* ContanctDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41556D1BDF477500215B67 /* ContanctDemoUITests.swift */; };
+		2F41557E1BDF4AF600215B67 /* AddressBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41557D1BDF4AF600215B67 /* AddressBook.swift */; };
+		2F4155801BDF594E00215B67 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41557F1BDF594E00215B67 /* DetailsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +37,6 @@
 /* Begin PBXFileReference section */
 		2F41554A1BDF477500215B67 /* ContanctDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ContanctDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F41554D1BDF477500215B67 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		2F41554F1BDF477500215B67 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		2F4155521BDF477500215B67 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2F4155541BDF477500215B67 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2F4155571BDF477500215B67 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -47,6 +47,8 @@
 		2F4155691BDF477500215B67 /* ContanctDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ContanctDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F41556D1BDF477500215B67 /* ContanctDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContanctDemoUITests.swift; sourceTree = "<group>"; };
 		2F41556F1BDF477500215B67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2F41557D1BDF4AF600215B67 /* AddressBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressBook.swift; sourceTree = "<group>"; };
+		2F41557F1BDF594E00215B67 /* DetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,9 +99,10 @@
 		2F41554C1BDF477500215B67 /* ContanctDemo */ = {
 			isa = PBXGroup;
 			children = (
+				2F41557D1BDF4AF600215B67 /* AddressBook.swift */,
 				2F41554D1BDF477500215B67 /* AppDelegate.swift */,
-				2F41554F1BDF477500215B67 /* ViewController.swift */,
 				2F4155511BDF477500215B67 /* Main.storyboard */,
+				2F41557F1BDF594E00215B67 /* DetailsViewController.swift */,
 				2F4155541BDF477500215B67 /* Assets.xcassets */,
 				2F4155561BDF477500215B67 /* LaunchScreen.storyboard */,
 				2F4155591BDF477500215B67 /* Info.plist */,
@@ -256,8 +259,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F4155501BDF477500215B67 /* ViewController.swift in Sources */,
+				2F41557E1BDF4AF600215B67 /* AddressBook.swift in Sources */,
 				2F41554E1BDF477500215B67 /* AppDelegate.swift in Sources */,
+				2F4155801BDF594E00215B67 /* DetailsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
