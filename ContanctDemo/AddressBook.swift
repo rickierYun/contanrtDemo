@@ -10,18 +10,36 @@ import UIKit
 import Contacts
 import ContactsUI
 
-class AddressBook: UITableViewController,CNContactPickerDelegate {
+class AddressBook: UITableViewController,CNContactPickerDelegate,UISearchBarDelegate{
     var detailViewController : DetailsViewController? = nil
     var contacters = [CNContact]()
+    var contacterBySearch = [CNContact]()
+    
+    @IBOutlet weak var searchTextField: UISearchBar!
+
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text == " " {
+            self.contacters = self.findContacters()
+        }else{
+            self.contacters = self.findContacters()
+            self.contacterBySearch = []
+            for contacter in contacters {
+                if ((CNContactFormatter.stringFromContact(contacter, style: .FullName)?.lowercaseString.hasPrefix(searchText)) != nil){
+                    self.contacterBySearch.append(contacter)
+                }
+            }
+        }
+        self.tableView!.reloadData()
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         if let split = self.splitViewController{
             let controller = split.viewControllers
             self.detailViewController = (controller[controller.count - 1] as! UINavigationController).topViewController as? DetailsViewController
         }
-        
+        self.tableView.registerNib(UINib(nibName: "myCell", bundle: nil), forCellReuseIdentifier: "myCell")
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0) ){
             self.contacters = self.findContacters()
             dispatch_async(dispatch_get_main_queue()){
@@ -79,11 +97,16 @@ class AddressBook: UITableViewController,CNContactPickerDelegate {
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
-        
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! myCell
+        tableView.registerClass(myCell.self, forCellReuseIdentifier: "Cell")
         let contacter = contacters[indexPath.row] as CNContact
         // Configure the cell...
-        cell.textLabel!.text = "\(contacter.familyName)\(contacter.givenName)"
+//        if let label = cell.contactCell{
+//            label.text = "\(contacter.familyName)\(contacter.givenName)"
+//        }else{
+            cell.textLabel!.text = "\(contacter.familyName)\(contacter.givenName)"
+//        }
+        
         return cell
     }
     

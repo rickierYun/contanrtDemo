@@ -20,16 +20,15 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BdD-Z3-76W">
                                 <rect key="frame" x="20" y="112" width="127" height="86"/>
                                 <animations/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Flu-Wz-P9g">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Flu-Wz-P9g">
                                 <rect key="frame" x="40" y="251" width="306" height="21"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x5A-yq-v2f">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x5A-yq-v2f">
                                 <rect key="frame" x="172" y="142" width="195" height="21"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -60,18 +59,37 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <searchBar key="tableHeaderView" contentMode="redraw" text="" placeholder="搜索" id="DeB-Oa-Drg">
+                            <rect key="frame" x="0.0" y="64" width="600" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <animations/>
+                            <textInputTraits key="textInputTraits" keyboardType="namePhonePad" keyboardAppearance="alert" returnKeyType="search"/>
+                            <connections>
+                                <outlet property="delegate" destination="Q6x-RC-cB7" id="Djz-ms-oKU"/>
+                            </connections>
+                        </searchBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="Egd-3K-FR9">
-                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="DpV-fo-jEt" customClass="myCell" customModule="ContanctDemo" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="136" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Egd-3K-FR9" id="cr8-kW-aJI">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DpV-fo-jEt" id="R2f-TF-75N">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7LL-Vt-imD">
+                                            <rect key="frame" x="30" y="14" width="121" height="21"/>
+                                            <animations/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                     <animations/>
                                 </tableViewCellContentView>
                                 <animations/>
                                 <connections>
-                                    <segue destination="Ai6-SD-rZb" kind="showDetail" identifier="showDetails" id="THD-dR-LJs"/>
+                                    <outlet property="contactCell" destination="7LL-Vt-imD" id="zVA-WY-84C"/>
+                                    <segue destination="Ai6-SD-rZb" kind="showDetail" identifier="showDetails" id="bCU-Dm-s6S"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -81,8 +99,21 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="所有联系人" id="p2A-Hm-uUI"/>
+                    <connections>
+                        <outlet property="searchDisplayController" destination="tTL-Hq-w1E" id="uTj-Mg-s0J"/>
+                        <outlet property="searchTextField" destination="DeB-Oa-Drg" id="nku-64-OWv"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hex-u0-QBF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="tTL-Hq-w1E">
+                    <connections>
+                        <outlet property="delegate" destination="Q6x-RC-cB7" id="RsU-R1-FRe"/>
+                        <outlet property="searchBar" destination="DeB-Oa-Drg" id="wdU-aV-IAO"/>
+                        <outlet property="searchContentsController" destination="Q6x-RC-cB7" id="eBU-rp-XD1"/>
+                        <outlet property="searchResultsDataSource" destination="Q6x-RC-cB7" id="UMt-oe-1Ll"/>
+                        <outlet property="searchResultsDelegate" destination="Q6x-RC-cB7" id="fIL-pH-CNx"/>
+                    </connections>
+                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="798" y="-553"/>
         </scene>
@@ -137,6 +168,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="THD-dR-LJs"/>
+        <segue reference="bCU-Dm-s6S"/>
     </inferredMetricsTieBreakers>
 </document>

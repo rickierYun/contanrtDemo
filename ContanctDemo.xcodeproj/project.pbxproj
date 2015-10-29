@@ -15,6 +15,7 @@
 		2F41556E1BDF477500215B67 /* ContanctDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41556D1BDF477500215B67 /* ContanctDemoUITests.swift */; };
 		2F41557E1BDF4AF600215B67 /* AddressBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41557D1BDF4AF600215B67 /* AddressBook.swift */; };
 		2F4155801BDF594E00215B67 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41557F1BDF594E00215B67 /* DetailsViewController.swift */; };
+		2F4155841BE1B8DF00215B67 /* myCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4155831BE1B8DF00215B67 /* myCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		2F41556F1BDF477500215B67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F41557D1BDF4AF600215B67 /* AddressBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressBook.swift; sourceTree = "<group>"; };
 		2F41557F1BDF594E00215B67 /* DetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
+		2F4155831BE1B8DF00215B67 /* myCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = myCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 				2F41554D1BDF477500215B67 /* AppDelegate.swift */,
 				2F4155511BDF477500215B67 /* Main.storyboard */,
 				2F41557F1BDF594E00215B67 /* DetailsViewController.swift */,
+				2F4155831BE1B8DF00215B67 /* myCell.swift */,
 				2F4155541BDF477500215B67 /* Assets.xcassets */,
 				2F4155561BDF477500215B67 /* LaunchScreen.storyboard */,
 				2F4155591BDF477500215B67 /* Info.plist */,
@@ -260,6 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F41557E1BDF4AF600215B67 /* AddressBook.swift in Sources */,
+				2F4155841BE1B8DF00215B67 /* myCell.swift in Sources */,
 				2F41554E1BDF477500215B67 /* AppDelegate.swift in Sources */,
 				2F4155801BDF594E00215B67 /* DetailsViewController.swift in Sources */,
 			);
@@ -486,6 +490,7 @@
 				2F4155741BDF477500215B67 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2F4155751BDF477500215B67 /* Build configuration list for PBXNativeTarget "ContanctDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -494,6 +499,7 @@
 				2F4155771BDF477500215B67 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2F4155781BDF477500215B67 /* Build configuration list for PBXNativeTarget "ContanctDemoUITests" */ = {
 			isa = XCConfigurationList;
@@ -502,6 +508,7 @@
 				2F41557A1BDF477500215B67 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
