@@ -64,9 +64,6 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <animations/>
                             <textInputTraits key="textInputTraits" keyboardType="namePhonePad" keyboardAppearance="alert" returnKeyType="search"/>
-                            <connections>
-                                <outlet property="delegate" destination="Q6x-RC-cB7" id="Djz-ms-oKU"/>
-                            </connections>
                         </searchBar>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="DpV-fo-jEt" customClass="myCell" customModule="ContanctDemo" customModuleProvider="target">
@@ -100,15 +97,15 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="所有联系人" id="p2A-Hm-uUI"/>
                     <connections>
+                        <outlet property="searchBar" destination="DeB-Oa-Drg" id="qK2-us-U6Q"/>
                         <outlet property="searchDisplayController" destination="tTL-Hq-w1E" id="uTj-Mg-s0J"/>
-                        <outlet property="searchTextField" destination="DeB-Oa-Drg" id="nku-64-OWv"/>
+                        <outlet property="tableView" destination="1mo-Rp-iMQ" id="f0i-yT-WjO"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hex-u0-QBF" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <searchDisplayController id="tTL-Hq-w1E">
                     <connections>
                         <outlet property="delegate" destination="Q6x-RC-cB7" id="RsU-R1-FRe"/>
-                        <outlet property="searchBar" destination="DeB-Oa-Drg" id="wdU-aV-IAO"/>
                         <outlet property="searchContentsController" destination="Q6x-RC-cB7" id="eBU-rp-XD1"/>
                         <outlet property="searchResultsDataSource" destination="Q6x-RC-cB7" id="UMt-oe-1Ll"/>
                         <outlet property="searchResultsDelegate" destination="Q6x-RC-cB7" id="fIL-pH-CNx"/>

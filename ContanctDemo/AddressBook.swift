@@ -15,7 +15,7 @@ class AddressBook: UITableViewController,CNContactPickerDelegate,UISearchBarDele
     var contacters = [CNContact]()
     var contacterBySearch = [CNContact]()
     
-    @IBOutlet weak var searchTextField: UISearchBar!
+    @IBOutlet weak var searchBar: UISearchBar!
 
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text == " " {
@@ -98,14 +98,14 @@ class AddressBook: UITableViewController,CNContactPickerDelegate,UISearchBarDele
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! myCell
-        tableView.registerClass(myCell.self, forCellReuseIdentifier: "Cell")
+        self.tableView.registerClass(myCell.self, forCellReuseIdentifier: "Cell")
         let contacter = contacters[indexPath.row] as CNContact
         // Configure the cell...
-//        if let label = cell.contactCell{
-//            label.text = "\(contacter.familyName)\(contacter.givenName)"
-//        }else{
-            cell.textLabel!.text = "\(contacter.familyName)\(contacter.givenName)"
-//        }
+        if let label = cell.contactCell{
+            label.text = "\(contacter.familyName)\(contacter.givenName)"
+        }else{
+            cell.textLabel?.text = "\(contacter.familyName)\(contacter.givenName)"
+        }
         
         return cell
     }
