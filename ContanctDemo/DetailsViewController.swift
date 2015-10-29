@@ -32,7 +32,7 @@ class DetailsViewController: UIViewController {
             }
             
             if let image = self.contactImage{
-                if contactImage.image != nil{
+                if contact.imageData != nil{
                     image.image = UIImage(data: contact.imageData!)
                 }
                 else {

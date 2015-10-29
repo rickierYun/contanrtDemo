@@ -17,6 +17,7 @@ class AddressBook: UITableViewController,CNContactPickerDelegate,UISearchBarDele
     
     @IBOutlet weak var searchBar: UISearchBar!
 
+
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text == " " {
             self.contacters = self.findContacters()
@@ -24,7 +25,7 @@ class AddressBook: UITableViewController,CNContactPickerDelegate,UISearchBarDele
             self.contacters = self.findContacters()
             self.contacterBySearch = []
             for contacter in contacters {
-                if ((CNContactFormatter.stringFromContact(contacter, style: .FullName)?.lowercaseString.hasPrefix(searchText)) != nil){
+                if (((CNContactFormatter.stringFromContact(contacter, style: .FullName)?.lowercaseString.hasPrefix(searchText)) ) != nil){
                     self.contacterBySearch.append(contacter)
                 }
             }
@@ -32,6 +33,20 @@ class AddressBook: UITableViewController,CNContactPickerDelegate,UISearchBarDele
         self.tableView!.reloadData()
     }
     
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        if searchBar.text == " " {
+            self.contacters = self.findContacters()
+        }else{
+            self.contacters = self.findContacters()
+            self.contacterBySearch = []
+            for contacter in contacters {
+                if (((CNContactFormatter.stringFromContact(contacter, style: .FullName)?.lowercaseString.hasPrefix(searchBar.text!)) ) != nil){
+                    self.contacterBySearch.append(contacter)
+                }
+            }
+        }
+        self.tableView!.reloadData()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,14 +113,14 @@ class AddressBook: UITableViewController,CNContactPickerDelegate,UISearchBarDele
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! myCell
-        self.tableView.registerClass(myCell.self, forCellReuseIdentifier: "Cell")
+        //self.tableView.registerClass(myCell.self, forCellReuseIdentifier: "Cell")
         let contacter = contacters[indexPath.row] as CNContact
         // Configure the cell...
-        if let label = cell.contactCell{
-            label.text = "\(contacter.familyName)\(contacter.givenName)"
-        }else{
+//        if let label = cell.contactCell{
+//            label.text = "\(contacter.familyName)\(contacter.givenName)"
+//        }else{
             cell.textLabel?.text = "\(contacter.familyName)\(contacter.givenName)"
-        }
+//        }
         
         return cell
     }
