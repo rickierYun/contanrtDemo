@@ -65,34 +65,37 @@
             </objects>
             <point key="canvasLocation" x="780" y="108"/>
         </scene>
-        <!--所有联系人-->
+        <!--contracts-->
         <scene sceneID="UAZ-El-Ht4">
             <objects>
-                <tableViewController clearsSelectionOnViewWillAppear="NO" id="Q6x-RC-cB7" customClass="AddressBook" customModule="ContanctDemo" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController clearsSelectionOnViewWillAppear="NO" id="Q6x-RC-cB7" customClass="ContactTabelviewController" customModule="ContanctDemo" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="1mo-Rp-iMQ">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <searchBar key="tableHeaderView" contentMode="redraw" text="" placeholder="搜索" id="DeB-Oa-Drg">
+                        <searchBar key="tableHeaderView" contentMode="redraw" id="4LC-IT-RMi">
                             <rect key="frame" x="0.0" y="64" width="600" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <animations/>
-                            <textInputTraits key="textInputTraits" keyboardType="namePhonePad" keyboardAppearance="alert" returnKeyType="search"/>
+                            <textInputTraits key="textInputTraits"/>
+                            <connections>
+                                <outlet property="delegate" destination="Q6x-RC-cB7" id="5Ri-Xg-fZi"/>
+                            </connections>
                         </searchBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="DpV-fo-jEt" customClass="myCell" customModule="ContanctDemo" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" showsReorderControl="YES" indentationWidth="10" reuseIdentifier="Cell" id="DpV-fo-jEt" customClass="myCell" customModule="ContanctDemo" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="136" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DpV-fo-jEt" id="R2f-TF-75N">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7LL-Vt-imD">
-                                            <rect key="frame" x="30" y="14" width="121" height="21"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t4i-se-GwT">
+                                            <rect key="frame" x="43" y="11" width="108" height="21"/>
                                             <animations/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -100,7 +103,7 @@
                                 </tableViewCellContentView>
                                 <animations/>
                                 <connections>
-                                    <outlet property="contactCell" destination="7LL-Vt-imD" id="zVA-WY-84C"/>
+                                    <outlet property="contactCell" destination="t4i-se-GwT" id="g1k-DR-Ggb"/>
                                     <segue destination="Ai6-SD-rZb" kind="showDetail" identifier="showDetails" id="bCU-Dm-s6S"/>
                                 </connections>
                             </tableViewCell>
@@ -110,24 +113,25 @@
                             <outlet property="delegate" destination="Q6x-RC-cB7" id="Ht9-0x-Yjw"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="所有联系人" id="p2A-Hm-uUI"/>
+                    <navigationItem key="navigationItem" title="contracts" id="p2A-Hm-uUI"/>
                     <connections>
-                        <outlet property="searchBar" destination="DeB-Oa-Drg" id="qK2-us-U6Q"/>
-                        <outlet property="searchDisplayController" destination="tTL-Hq-w1E" id="uTj-Mg-s0J"/>
+                        <outlet property="SearchBar" destination="4LC-IT-RMi" id="6bm-6B-N13"/>
+                        <outlet property="searchDisplayController" destination="jsz-fu-W6K" id="PeN-Nl-Wff"/>
                         <outlet property="tableView" destination="1mo-Rp-iMQ" id="f0i-yT-WjO"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hex-u0-QBF" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="tTL-Hq-w1E">
+                <searchDisplayController id="jsz-fu-W6K">
                     <connections>
-                        <outlet property="delegate" destination="Q6x-RC-cB7" id="RsU-R1-FRe"/>
-                        <outlet property="searchContentsController" destination="Q6x-RC-cB7" id="eBU-rp-XD1"/>
-                        <outlet property="searchResultsDataSource" destination="Q6x-RC-cB7" id="UMt-oe-1Ll"/>
-                        <outlet property="searchResultsDelegate" destination="Q6x-RC-cB7" id="fIL-pH-CNx"/>
+                        <outlet property="delegate" destination="Q6x-RC-cB7" id="qet-qK-jyO"/>
+                        <outlet property="searchBar" destination="4LC-IT-RMi" id="OtO-8l-eFs"/>
+                        <outlet property="searchContentsController" destination="Q6x-RC-cB7" id="QgG-Q2-Wqq"/>
+                        <outlet property="searchResultsDataSource" destination="Q6x-RC-cB7" id="xjE-hE-IXx"/>
+                        <outlet property="searchResultsDelegate" destination="Q6x-RC-cB7" id="Aou-Na-hel"/>
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="798" y="-553"/>
+            <point key="canvasLocation" x="1096" y="-501"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="DNb-hI-5SM">

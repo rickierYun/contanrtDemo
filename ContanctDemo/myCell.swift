@@ -7,19 +7,17 @@
 //
 
 import UIKit
+import Contacts
+import ContactsUI
 
 class myCell: UITableViewCell {
 
     @IBOutlet weak var contactCell: UILabel!
-//    @IBOutlet var cellLable :UILabel!
     
-//    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-//        super.init(style: style, reuseIdentifier: reuseIdentifier)
-//    }
-//
-//    required init?(coder aDecoder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
+    func update(){
+        contactCell.text = nil
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

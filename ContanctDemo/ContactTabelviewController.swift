@@ -10,62 +10,77 @@ import UIKit
 import Contacts
 import ContactsUI
 
-class AddressBook: UITableViewController,CNContactPickerDelegate,UISearchBarDelegate{
+class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,UISearchDisplayDelegate,UISearchBarDelegate{
     var detailViewController : DetailsViewController? = nil
     var contacters = [CNContact]()
     var contacterBySearch = [CNContact]()
+    var searchActive : Bool = false
     
-    @IBOutlet weak var searchBar: UISearchBar!
-
+    @IBOutlet weak var SearchBar: UISearchBar!
 
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchBar.text == " " {
-            self.contacters = self.findContacters()
-        }else{
-            self.contacters = self.findContacters()
-            self.contacterBySearch = []
-            for contacter in contacters {
-                if (((CNContactFormatter.stringFromContact(contacter, style: .FullName)?.lowercaseString.hasPrefix(searchText)) ) != nil){
-                    self.contacterBySearch.append(contacter)
-                }
-            }
+//        if searchBar.text == "" {
+//            self.contacterBySearch = self.contacters
+//        }else{
+//                self.contacters = self.findContacters()
+//                self.contacters.removeAll()
+//                self.contacterBySearch = []
+//                for contacter in self.contacters {
+//                    if (((CNContactFormatter.stringFromContact(contacter, style: .FullName)?.lowercaseString.hasPrefix(searchText)) ) != nil){
+//                        self.contacterBySearch.append(contacter)
+//                    }
+//                }
+//        }
+//
+        contacterBySearch = contacters.filter { (CNContactFormatter) -> Bool in
+            let tmp : NSString = CNContactFormatter.familyName
+            let rang = tmp.rangeOfString(searchText, options: NSStringCompareOptions.CaseInsensitiveSearch)
+            return rang.location != NSNotFound
+        }        
+        
+        if contacterBySearch.count == 0{
+            searchActive = false
+        }else {
+            searchActive = true
         }
-        self.tableView!.reloadData()
+        contacters.removeAll()
+        self.tableView.reloadData()
     }
     
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
-        if searchBar.text == " " {
-            self.contacters = self.findContacters()
-        }else{
-            self.contacters = self.findContacters()
-            self.contacterBySearch = []
-            for contacter in contacters {
-                if (((CNContactFormatter.stringFromContact(contacter, style: .FullName)?.lowercaseString.hasPrefix(searchBar.text!)) ) != nil){
-                    self.contacterBySearch.append(contacter)
-                }
-            }
-        }
-        self.tableView!.reloadData()
+        searchActive = true
     }
     
+    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+        searchActive = false
+    }
+    
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        searchActive = false
+        searchBar.text = ""
+    }
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        searchActive = true
+        searchBar.text = ""
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.dataSource = self
+        tableView.delegate = self
         if let split = self.splitViewController{
             let controller = split.viewControllers
             self.detailViewController = (controller[controller.count - 1] as! UINavigationController).topViewController as? DetailsViewController
         }
-        self.tableView.registerNib(UINib(nibName: "myCell", bundle: nil), forCellReuseIdentifier: "myCell")
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0) ){
-            self.contacters = self.findContacters()
-            dispatch_async(dispatch_get_main_queue()){
-                self.tableView!.reloadData()
-            }
-        }
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        self.contacters = self.findContacters()
+       // self.contacterBySearch = self.contacters
+        
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0) ){
+        
+//            dispatch_async(dispatch_get_main_queue()){
+//                self.tableView!.reloadData()
+//            }
+//        }
     }
     // MARK: - findContacters
     func findContacters() ->[CNContact]{
@@ -107,21 +122,30 @@ class AddressBook: UITableViewController,CNContactPickerDelegate,UISearchBarDele
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return self.contacters.count
+        if searchActive {
+            return self.contacterBySearch.count
+        }else{
+            return self.contacters.count
+        }
+        
     }
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! myCell
-        //self.tableView.registerClass(myCell.self, forCellReuseIdentifier: "Cell")
-        let contacter = contacters[indexPath.row] as CNContact
-        // Configure the cell...
-//        if let label = cell.contactCell{
-//            label.text = "\(contacter.familyName)\(contacter.givenName)"
-//        }else{
-            cell.textLabel?.text = "\(contacter.familyName)\(contacter.givenName)"
-//        }
+        let identifiyCell = "Cell"
+        let cell = tableView.dequeueReusableCellWithIdentifier(identifiyCell, forIndexPath: indexPath) as! myCell
+        //self.tableView.registerClass(myCell.self, forCellReuseIdentifier: identifiyCell)
         
+        // Configure the cell...
+        if (searchActive){
+            let contacter = contacterBySearch[indexPath.row] as CNContact
+            cell.contactCell.text = "\(contacter.familyName)\(contacter.givenName)"
+          
+        }else{
+            let contacter = contacters[indexPath.row] as CNContact
+            cell.contactCell!.text = "\(contacter.familyName)\(contacter.givenName)"
+        }
+        print("\(cell)")
         return cell
     }
     

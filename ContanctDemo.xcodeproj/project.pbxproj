@@ -13,7 +13,7 @@
 		2F4155581BDF477500215B67 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F4155561BDF477500215B67 /* LaunchScreen.storyboard */; };
 		2F4155631BDF477500215B67 /* ContanctDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4155621BDF477500215B67 /* ContanctDemoTests.swift */; };
 		2F41556E1BDF477500215B67 /* ContanctDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41556D1BDF477500215B67 /* ContanctDemoUITests.swift */; };
-		2F41557E1BDF4AF600215B67 /* AddressBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41557D1BDF4AF600215B67 /* AddressBook.swift */; };
+		2F41557E1BDF4AF600215B67 /* ContactTabelviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41557D1BDF4AF600215B67 /* ContactTabelviewController.swift */; };
 		2F4155801BDF594E00215B67 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41557F1BDF594E00215B67 /* DetailsViewController.swift */; };
 		2F4155841BE1B8DF00215B67 /* myCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4155831BE1B8DF00215B67 /* myCell.swift */; };
 /* End PBXBuildFile section */
@@ -48,7 +48,7 @@
 		2F4155691BDF477500215B67 /* ContanctDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ContanctDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F41556D1BDF477500215B67 /* ContanctDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContanctDemoUITests.swift; sourceTree = "<group>"; };
 		2F41556F1BDF477500215B67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2F41557D1BDF4AF600215B67 /* AddressBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressBook.swift; sourceTree = "<group>"; };
+		2F41557D1BDF4AF600215B67 /* ContactTabelviewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactTabelviewController.swift; sourceTree = "<group>"; };
 		2F41557F1BDF594E00215B67 /* DetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 		2F4155831BE1B8DF00215B67 /* myCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = myCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -101,7 +101,7 @@
 		2F41554C1BDF477500215B67 /* ContanctDemo */ = {
 			isa = PBXGroup;
 			children = (
-				2F41557D1BDF4AF600215B67 /* AddressBook.swift */,
+				2F41557D1BDF4AF600215B67 /* ContactTabelviewController.swift */,
 				2F41554D1BDF477500215B67 /* AppDelegate.swift */,
 				2F4155511BDF477500215B67 /* Main.storyboard */,
 				2F41557F1BDF594E00215B67 /* DetailsViewController.swift */,
@@ -262,7 +262,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F41557E1BDF4AF600215B67 /* AddressBook.swift in Sources */,
+				2F41557E1BDF4AF600215B67 /* ContactTabelviewController.swift in Sources */,
 				2F4155841BE1B8DF00215B67 /* myCell.swift in Sources */,
 				2F41554E1BDF477500215B67 /* AppDelegate.swift in Sources */,
 				2F4155801BDF594E00215B67 /* DetailsViewController.swift in Sources */,
