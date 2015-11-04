@@ -7,15 +7,13 @@
 //
 
 import UIKit
-import Contacts
-import ContactsUI
 
 class myCell: UITableViewCell {
 
-    @IBOutlet weak var contactCell: UILabel!
-    
-    func update(){
-        contactCell.text = nil
+    @IBOutlet weak var contactCell: UILabel!{
+        didSet{
+             contactCell.text = nil
+        }
     }
     
     override func awakeFromNib() {
