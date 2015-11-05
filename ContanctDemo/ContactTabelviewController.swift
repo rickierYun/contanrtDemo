@@ -133,7 +133,7 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let identifiyCell = "Cell"
-        let cell = tableView.dequeueReusableCellWithIdentifier(identifiyCell, forIndexPath: indexPath) as! myCell
+        let cell = self.tableView.dequeueReusableCellWithIdentifier(identifiyCell, forIndexPath: indexPath) as! myCell
         //self.tableView.registerClass(myCell.self, forCellReuseIdentifier: identifiyCell)
         
         // Configure the cell...
