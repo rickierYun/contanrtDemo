@@ -19,36 +19,32 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
     @IBOutlet weak var SearchBar: UISearchBar!
 
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-//        if searchBar.text == "" {
-//            self.contacterBySearch = self.contacters
-//        }else{
-//                self.contacters = self.findContacters()
-//                self.contacters.removeAll()
-//                self.contacterBySearch = []
-//                for contacter in self.contacters {
-//                    if (((CNContactFormatter.stringFromContact(contacter, style: .FullName)?.lowercaseString.hasPrefix(searchText)) ) != nil){
-//                        self.contacterBySearch.append(contacter)
-//                    }
-//                }
-//        }
-//
+        self.contacters = self.findContacters()
+        contacterBySearch = []
         contacterBySearch = contacters.filter { (CNContactFormatter) -> Bool in
-            let tmp : NSString = CNContactFormatter.familyName
+            let tmp : NSString = CNContactFormatter.familyName + CNContactFormatter.givenName
             let rang = tmp.rangeOfString(searchText, options: NSStringCompareOptions.CaseInsensitiveSearch)
             return rang.location != NSNotFound
-        }        
+        }
         
-        if contacterBySearch.count == 0{
-            searchActive = false
+        if contacterBySearch.count == 0 {
+            if searchText != "" {
+                contacters.removeAll()
+                searchActive = false
+            }else{                
+                searchActive = false
+            }
         }else {
+            contacters.removeAll()
             searchActive = true
         }
-        contacters.removeAll()
         self.tableView.reloadData()
     }
     
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
         searchActive = true
+        self.contacterBySearch = self.contacters
+        self.tableView.reloadData()
     }
     
     func searchBarTextDidEndEditing(searchBar: UISearchBar) {
@@ -57,13 +53,14 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
     
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
         searchActive = false
-        searchBar.text = ""
+        self.contacters = self.findContacters()
+        self.tableView.reloadData()
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchActive = true
-        searchBar.text = ""
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
@@ -73,14 +70,6 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
             self.detailViewController = (controller[controller.count - 1] as! UINavigationController).topViewController as? DetailsViewController
         }
         self.contacters = self.findContacters()
-       // self.contacterBySearch = self.contacters
-        
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0) ){
-        
-//            dispatch_async(dispatch_get_main_queue()){
-//                self.tableView!.reloadData()
-//            }
-//        }
     }
     // MARK: - findContacters
     func findContacters() ->[CNContact]{
@@ -139,13 +128,13 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         // Configure the cell...
         if (searchActive){
             let contacter = contacterBySearch[indexPath.row] as CNContact
-            cell.contactCell.text = "\(contacter.familyName)\(contacter.givenName)"
+            print("\(contacter)")
+            cell.textLabel?.text = "\(contacter.familyName)\(contacter.givenName)"
           
         }else{
             let contacter = contacters[indexPath.row] as CNContact
-            cell.contactCell!.text = "\(contacter.familyName)\(contacter.givenName)"
+            cell.textLabel?.text = "\(contacter.familyName)\(contacter.givenName)"
         }
-        print("\(cell)")
         return cell
     }
     
@@ -171,17 +160,22 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
     }
     */
 
-    /*
+    
     // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+   /* override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            contacterBySearch.removeAtIndex(indexPath.row)
+            
+//            NSUserDefaults.standardUserDefaults().setObject(contacterBySearch, forKey: "Contacters")
+//            NSUserDefaults.standardUserDefaults().synchronize()
+            self.tableView.reloadData()
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
-    }
-    */
+    }*/
+    
 
     /*
     // Override to support rearranging the table view.
