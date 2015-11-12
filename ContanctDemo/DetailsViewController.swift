@@ -11,7 +11,16 @@ import Contacts
 
 class DetailsViewController: UIViewController {
  
-    @IBOutlet weak var contactImage: UIImageView!
+    @IBOutlet weak var contactImage: UIImageView!{
+        didSet{
+            //设置图片为圆形
+            self.contactImage.layer.cornerRadius = self.contactImage.frame.size.width / 2
+            self.contactImage.clipsToBounds = true
+//            self.contactImage.layer.borderWidth = 3.0
+//            self.contactImage.layer.borderColor = UIColor.whiteColor().CGColor
+            
+        }
+    }
     
     @IBOutlet weak var contactName: UILabel!
     

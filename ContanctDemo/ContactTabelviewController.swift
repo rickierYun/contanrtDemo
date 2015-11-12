@@ -9,12 +9,21 @@
 import UIKit
 import Contacts
 import ContactsUI
+import Foundation
+import CoreFoundation
 
 class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,UISearchDisplayDelegate,UISearchBarDelegate{
     var detailViewController : DetailsViewController? = nil
     var contacters = [CNContact]()
     var contacterBySearch = [CNContact]()
     var searchActive : Bool = false
+    var fetchWord : [String] = []
+    enum StringOrCNContact{
+        case StringValue(String)
+        case CNContactValue(CNContact)
+        }
+    var indexContact = [[StringOrCNContact]]()
+    //var indexContact = [[String]]()
     
     @IBOutlet weak var SearchBar: UISearchBar!
 
@@ -65,11 +74,14 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.sectionIndexColor = UIColor.blackColor()
         if let split = self.splitViewController{
             let controller = split.viewControllers
             self.detailViewController = (controller[controller.count - 1] as! UINavigationController).topViewController as? DetailsViewController
         }
         self.contacters = self.findContacters()
+        self.fetchWord = firstletter()
+        self.indexContact = indexContacter()
     }
     // MARK: - findContacters
     func findContacters() ->[CNContact]{
@@ -106,7 +118,11 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+        if searchActive{
+            return 1
+        }else{
+            return self.indexContact.count
+        }
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -114,8 +130,10 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         if searchActive {
             return self.contacterBySearch.count
         }else{
-            return self.contacters.count
+            let rowCount = fetchTheFirstLetterRow(fetchWord[section])
+            return rowCount.count
         }
+        
         
     }
 
@@ -128,30 +146,154 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         // Configure the cell...
         if (searchActive){
             let contacter = contacterBySearch[indexPath.row] as CNContact
-            print("\(contacter)")
             cell.textLabel?.text = "\(contacter.familyName)\(contacter.givenName)"
           
         }else{
-            let contacter = contacters[indexPath.row] as CNContact
-            cell.textLabel?.text = "\(contacter.familyName)\(contacter.givenName)"
+            switch indexContact[indexPath.section][indexPath.item + 1] {
+            case let .CNContactValue(s):
+                cell.textLabel?.text = "\(s.familyName)\(s.givenName)"
+            default:break
+            }
+            
         }
         return cell
     }
     
-    //MARK: - showDetails
+    override func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
+        if searchActive {
+            return nil
+        }else{
+            return self.fetchWord
+        }
+    }
+    
+    override func tableView(tableView: UITableView, sectionForSectionIndexTitle title: String, atIndex index: Int) -> Int {
+        var topIndex = 0
+        for Character in self.fetchWord{
+            if Character == title {
+                return topIndex
+            }
+            topIndex++
+        }
+        return 0
+    }
+
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return self.fetchWord[section]
+       
+    }
+    
+// MARK: - Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showDetails" {
             if let indexPath = self.tableView.indexPathForSelectedRow {
-                let contact = contacters[indexPath.row] as CNContact
-                let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailsViewController
-                controller.contact = contact
-                controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
-                controller.navigationItem.leftItemsSupplementBackButton = true
+                switch indexContact[indexPath.section][indexPath.item + 1] {
+                case let .CNContactValue(s):
+                    let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailsViewController
+                    controller.contact = s
+                    controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+                    controller.navigationItem.leftItemsSupplementBackButton = true
+                default:break
+                }
             }
         }
     }
+    
+    //MARK: - firstletter
+    //制作tableview的索引
+    func firstletter() -> [String] {
+        var contact : [String] = []
+        var stringFor : NSMutableString
+        for contacter in contacters {
+            stringFor = NSMutableString( string: CNContactFormatter.stringFromContact(contacter, style: .FullName)!)
+            //将所得到的联系人名字转换成拼音，寻找首字母
+            if CFStringTransform(stringFor,nil, kCFStringTransformMandarinLatin, false){
+                if CFStringTransform(stringFor,nil, kCFStringTransformStripDiacritics, false) {
+                    let topIndex : String = stringFor as String
+                    let index = topIndex.startIndex.advancedBy(1)
+                    var firstLetter : String = topIndex.substringToIndex(index)
+                    firstLetter = firstLetter.uppercaseString //将字符转弯大写 ，转换为小写为lowercaseString
+                    if contact.isEmpty {
+                        contact.append(firstLetter)
+                    }else{
+                        var indexForContact = 0
+                        for Character in contact {
+                            if Character == firstLetter {
+                                break
+                            }
+                            else{
+                                indexForContact++
+                                if indexForContact == contact.count{
+                                    contact.append(firstLetter)
+                                }
+                            }
+                        }
+                    }                   
+                }
+            }
+        }
+        return contact
+        
+    }
+   
+    func fetchTheFirstLetterRow(str : String) -> [CNContact]{
+        var rowNumbers : [CNContact] = []
+        var stringFor : NSMutableString
+            for Character in contacters {
+                stringFor = NSMutableString(string: CNContactFormatter.stringFromContact(Character,style: .FullName)!)
+                if CFStringTransform(stringFor, nil , kCFStringTransformMandarinLatin, false){
+                    if CFStringTransform(stringFor, nil, kCFStringTransformStripDiacritics, false){
+                        let topIndex : String = stringFor as String
+                        let index = topIndex.startIndex.advancedBy(1)
+                        var firstLetter : String = topIndex.substringToIndex(index)
+                        firstLetter = firstLetter.uppercaseString
+                        if str == firstLetter {
+                            rowNumbers.append(Character)
+                        }
+                        
+                    }
+                }
+            }
+        return rowNumbers
+    }
+    
+// Thanks for 王巍！ 给我一些数组中写入不同类型变量的思想方式
+    func indexContacter() -> [[StringOrCNContact]]{
+        var indexContacter = [[StringOrCNContact]]()
+        for Character in fetchWord {
+            var rowArray = [StringOrCNContact]()
+            var stringFor : NSMutableString
+            for contact in contacters {
+                stringFor = NSMutableString(string: CNContactFormatter.stringFromContact(contact,style: .FullName)!)
+                if CFStringTransform(stringFor, nil , kCFStringTransformMandarinLatin, false){
+                    if CFStringTransform(stringFor, nil, kCFStringTransformStripDiacritics, false){
+                        let topIndex : String = stringFor as String
+                        let index = topIndex.startIndex.advancedBy(1)
+                        var firstLetter : String = topIndex.substringToIndex(index)
+                        firstLetter = firstLetter.uppercaseString
+                        if rowArray.isEmpty {
+                            rowArray.append(StringOrCNContact.StringValue(Character))
+                            if Character == firstLetter{
+                                
+                                rowArray.append(StringOrCNContact.CNContactValue(contact))
+                            }
+                        }else{
+                            if Character == firstLetter{
+                                rowArray.append(StringOrCNContact.CNContactValue(contact))
+                            }
+                        }
+                    }
+                }
+            }
+            indexContacter.append(rowArray)
+        }
+        print("\(indexContacter)")
+        return indexContacter
+    }
 
+
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -192,14 +334,5 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
     }
     */
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+    
 }
