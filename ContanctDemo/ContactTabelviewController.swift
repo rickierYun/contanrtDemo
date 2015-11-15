@@ -17,16 +17,16 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
     var contacters = [CNContact]()
     var contacterBySearch = [CNContact]()
     var searchActive : Bool = false
-    var fetchWord : [String] = []
+    var fetchWord : [String] = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
     enum StringOrCNContact{
         case StringValue(String)
         case CNContactValue(CNContact)
         }
     var indexContact = [[StringOrCNContact]]()
-    //var indexContact = [[String]]()
     
     @IBOutlet weak var SearchBar: UISearchBar!
 
+//MARK: - searchBar
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         self.contacters = self.findContacters()
         contacterBySearch = []
@@ -69,7 +69,7 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchActive = true
     }
-    
+//MARK: - viewLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
@@ -80,10 +80,21 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
             self.detailViewController = (controller[controller.count - 1] as! UINavigationController).topViewController as? DetailsViewController
         }
         self.contacters = self.findContacters()
-        self.fetchWord = firstletter()
+        //self.fetchWord = firstletter()
         self.indexContact = indexContacter()
     }
-    // MARK: - findContacters
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.clearsSelectionOnViewWillAppear = self.splitViewController!.collapsed
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+// MARK: - findContacters
     func findContacters() ->[CNContact]{
         let store = CNContactStore()
         
@@ -104,17 +115,7 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         return contacts
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillAppear(animated)
-        self.clearsSelectionOnViewWillAppear = self.splitViewController!.collapsed
-    }
-    
-    // MARK: - Table view data source
+// MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -130,14 +131,12 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         if searchActive {
             return self.contacterBySearch.count
         }else{
-            let rowCount = fetchTheFirstLetterRow(fetchWord[section])
-            return rowCount.count
+            let indexCount = indexContact[section].count - 1
+            return indexCount
         }
-        
         
     }
 
-    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let identifiyCell = "Cell"
         let cell = self.tableView.dequeueReusableCellWithIdentifier(identifiyCell, forIndexPath: indexPath) as! myCell
@@ -149,12 +148,12 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
             cell.textLabel?.text = "\(contacter.familyName)\(contacter.givenName)"
           
         }else{
+            
             switch indexContact[indexPath.section][indexPath.item + 1] {
             case let .CNContactValue(s):
                 cell.textLabel?.text = "\(s.familyName)\(s.givenName)"
             default:break
             }
-            
         }
         return cell
     }
@@ -179,8 +178,12 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
     }
 
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return self.fetchWord[section]
-       
+        var returnString: String = ""
+        if indexContact[section].count != 0{
+                returnString = self.fetchWord[section]        
+    
+        }
+        return returnString
     }
     
 // MARK: - Navigation
@@ -200,95 +203,37 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         }
     }
     
-    //MARK: - firstletter
-    //制作tableview的索引
-    func firstletter() -> [String] {
-        var contact : [String] = []
-        var stringFor : NSMutableString
-        for contacter in contacters {
-            stringFor = NSMutableString( string: CNContactFormatter.stringFromContact(contacter, style: .FullName)!)
-            //将所得到的联系人名字转换成拼音，寻找首字母
-            if CFStringTransform(stringFor,nil, kCFStringTransformMandarinLatin, false){
-                if CFStringTransform(stringFor,nil, kCFStringTransformStripDiacritics, false) {
-                    let topIndex : String = stringFor as String
-                    let index = topIndex.startIndex.advancedBy(1)
-                    var firstLetter : String = topIndex.substringToIndex(index)
-                    firstLetter = firstLetter.uppercaseString //将字符转弯大写 ，转换为小写为lowercaseString
-                    if contact.isEmpty {
-                        contact.append(firstLetter)
-                    }else{
-                        var indexForContact = 0
-                        for Character in contact {
-                            if Character == firstLetter {
-                                break
-                            }
-                            else{
-                                indexForContact++
-                                if indexForContact == contact.count{
-                                    contact.append(firstLetter)
-                                }
-                            }
-                        }
-                    }                   
-                }
-            }
-        }
-        return contact
-        
-    }
-   
-    func fetchTheFirstLetterRow(str : String) -> [CNContact]{
-        var rowNumbers : [CNContact] = []
-        var stringFor : NSMutableString
-            for Character in contacters {
-                stringFor = NSMutableString(string: CNContactFormatter.stringFromContact(Character,style: .FullName)!)
-                if CFStringTransform(stringFor, nil , kCFStringTransformMandarinLatin, false){
-                    if CFStringTransform(stringFor, nil, kCFStringTransformStripDiacritics, false){
-                        let topIndex : String = stringFor as String
-                        let index = topIndex.startIndex.advancedBy(1)
-                        var firstLetter : String = topIndex.substringToIndex(index)
-                        firstLetter = firstLetter.uppercaseString
-                        if str == firstLetter {
-                            rowNumbers.append(Character)
-                        }
-                        
-                    }
-                }
-            }
-        return rowNumbers
-    }
-    
 // Thanks for 王巍！ 给我一些数组中写入不同类型变量的思想方式
+// MARK: - indexContacter 
+// 将索引字母与联系人构成一个二维数组
     func indexContacter() -> [[StringOrCNContact]]{
         var indexContacter = [[StringOrCNContact]]()
         for Character in fetchWord {
             var rowArray = [StringOrCNContact]()
             var stringFor : NSMutableString
             for contact in contacters {
+                //将所得到的联系人名字转换成拼音，寻找首字母
                 stringFor = NSMutableString(string: CNContactFormatter.stringFromContact(contact,style: .FullName)!)
-                if CFStringTransform(stringFor, nil , kCFStringTransformMandarinLatin, false){
-                    if CFStringTransform(stringFor, nil, kCFStringTransformStripDiacritics, false){
+                if CFStringTransform(stringFor, nil, kCFStringTransformMandarinLatin, false){   //取得带音标的字符
+                    if CFStringTransform(stringFor, nil, kCFStringTransformStripDiacritics, false){ //取得不带音标的字符
                         let topIndex : String = stringFor as String
                         let index = topIndex.startIndex.advancedBy(1)
                         var firstLetter : String = topIndex.substringToIndex(index)
                         firstLetter = firstLetter.uppercaseString
-                        if rowArray.isEmpty {
+                        if Character != firstLetter && rowArray.isEmpty == false{
+                            break
+                        }else if rowArray.isEmpty && Character == firstLetter{
                             rowArray.append(StringOrCNContact.StringValue(Character))
-                            if Character == firstLetter{
-                                
-                                rowArray.append(StringOrCNContact.CNContactValue(contact))
-                            }
-                        }else{
-                            if Character == firstLetter{
-                                rowArray.append(StringOrCNContact.CNContactValue(contact))
-                            }
+                            rowArray.append(StringOrCNContact.CNContactValue(contact))
+                        }else if Character == firstLetter && rowArray.isEmpty == false{
+                            rowArray.append(StringOrCNContact.CNContactValue(contact))
                         }
                     }
                 }
             }
             indexContacter.append(rowArray)
+            
         }
-        print("\(indexContacter)")
         return indexContacter
     }
 
