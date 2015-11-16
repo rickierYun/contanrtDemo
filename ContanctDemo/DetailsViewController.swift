@@ -16,17 +16,29 @@ class DetailsViewController: UIViewController {
             //设置图片为圆形
             self.contactImage.layer.cornerRadius = self.contactImage.frame.size.width / 2
             self.contactImage.clipsToBounds = true
-//            self.contactImage.layer.borderWidth = 3.0
-//            self.contactImage.layer.borderColor = UIColor.whiteColor().CGColor
-            
         }
     }
     
     @IBOutlet weak var contactName: UILabel!
-    
     @IBOutlet weak var contactPhoneNumber: UILabel!
+    @IBOutlet weak var mobile: UILabel!
+    
+    @IBAction func callPhone(sender: UIButton) {       
+        let phoneNumber = self.contactPhoneNumber.text! as String
+        let telUrl = "tel://" + "\(phoneNumber)" as String
+        let url = NSURL(string: telUrl)!
+        UIApplication.sharedApplication().openURL(url)
+    }
+   
+    @IBAction func messageButton(sender: UIButton) {
+        let messageNumber = self.contactPhoneNumber.text! as String
+        let smsNumber = "sms://" + "\(messageNumber)" as String
+        let url = NSURL(string: smsNumber)!
+        UIApplication.sharedApplication().openURL(url)
+    }
+    
     var contact: CNContact? {
-        didSet{
+                didSet{
             self.fetchView()
         }
         
@@ -44,21 +56,20 @@ class DetailsViewController: UIViewController {
                 if contact.imageData != nil{
                     image.image = UIImage(data: contact.imageData!)
                 }
-                else {
-                    image.image = nil
-                }
             }
             
             if let phoneNumberLable = self.contactPhoneNumber{
-                var numberArry = [String]()
                 for number in contact.phoneNumbers{
+                    let lable = number.label
                     let phoneNumber = number.value as! CNPhoneNumber
-                    numberArry.append(phoneNumber.stringValue)
+                    if lable == "_$!<Mobile>!$_" {
+                        phoneNumberLable.text = phoneNumber.stringValue
+                    }
                 }
-                phoneNumberLable.text = numberArry.joinWithSeparator(",")
             }
         }
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.fetchView()

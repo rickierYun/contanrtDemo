@@ -16,6 +16,7 @@
 		2F41557E1BDF4AF600215B67 /* ContactTabelviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41557D1BDF4AF600215B67 /* ContactTabelviewController.swift */; };
 		2F4155801BDF594E00215B67 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41557F1BDF594E00215B67 /* DetailsViewController.swift */; };
 		2F4155841BE1B8DF00215B67 /* myCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4155831BE1B8DF00215B67 /* myCell.swift */; };
+		2F7A51711BF961F000B05959 /* images.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 2F7A51701BF961F000B05959 /* images.jpeg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		2F41557D1BDF4AF600215B67 /* ContactTabelviewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactTabelviewController.swift; sourceTree = "<group>"; };
 		2F41557F1BDF594E00215B67 /* DetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 		2F4155831BE1B8DF00215B67 /* myCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = myCell.swift; sourceTree = "<group>"; };
+		2F7A51701BF961F000B05959 /* images.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = images.jpeg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 		2F41554C1BDF477500215B67 /* ContanctDemo */ = {
 			isa = PBXGroup;
 			children = (
+				2F7A516D1BF95B9800B05959 /* image */,
 				2F41557D1BDF4AF600215B67 /* ContactTabelviewController.swift */,
 				2F41554D1BDF477500215B67 /* AppDelegate.swift */,
 				2F4155511BDF477500215B67 /* Main.storyboard */,
@@ -129,6 +132,14 @@
 				2F41556F1BDF477500215B67 /* Info.plist */,
 			);
 			path = ContanctDemoUITests;
+			sourceTree = "<group>";
+		};
+		2F7A516D1BF95B9800B05959 /* image */ = {
+			isa = PBXGroup;
+			children = (
+				2F7A51701BF961F000B05959 /* images.jpeg */,
+			);
+			name = image;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -236,6 +247,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F4155581BDF477500215B67 /* LaunchScreen.storyboard in Resources */,
+				2F7A51711BF961F000B05959 /* images.jpeg in Resources */,
 				2F4155551BDF477500215B67 /* Assets.xcassets in Resources */,
 				2F4155531BDF477500215B67 /* Main.storyboard in Resources */,
 			);
