@@ -21,12 +21,13 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
     enum StringOrCNContact{
         case StringValue(String)
         case CNContactValue(CNContact)
-        }
+    }
     var indexContact = [[StringOrCNContact]]()
+    var copyIndexContact = [[StringOrCNContact]]()
     
     @IBOutlet weak var SearchBar: UISearchBar!
-
-//MARK: - searchBar
+    
+    //MARK: - searchBar
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         self.contacters = self.findContacters()
         contacterBySearch = []
@@ -38,13 +39,13 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         
         if contacterBySearch.count == 0 {
             if searchText != "" {
-                contacters.removeAll()
+                indexContact.removeAll()
                 searchActive = false
-            }else{                
+            }else{
                 searchActive = false
             }
         }else {
-            contacters.removeAll()
+            indexContact.removeAll()
             searchActive = true
         }
         self.tableView.reloadData()
@@ -52,7 +53,7 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
     
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
         searchActive = true
-        self.contacterBySearch = self.contacters
+        self.indexContact = self.copyIndexContact
         self.tableView.reloadData()
     }
     
@@ -62,14 +63,15 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
     
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
         searchActive = false
-        self.contacters = self.findContacters()
+        self.indexContact = self.copyIndexContact
         self.tableView.reloadData()
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchActive = true
     }
-//MARK: - viewLoad
+    
+    //MARK: - viewLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
@@ -82,6 +84,7 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         self.contacters = self.findContacters()
         //self.fetchWord = firstletter()
         self.indexContact = indexContacter()
+        self.copyIndexContact = self.indexContact
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -94,7 +97,7 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         // Dispose of any resources that can be recreated.
     }
     
-// MARK: - findContacters
+    // MARK: - findContacters
     func findContacters() ->[CNContact]{
         let store = CNContactStore()
         
@@ -114,9 +117,9 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         }
         return contacts
     }
-
-// MARK: - Table view data source
-
+    
+    // MARK: - Table view data source
+    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         if searchActive{
@@ -125,7 +128,7 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
             return self.indexContact.count
         }
     }
-
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         if searchActive {
@@ -136,7 +139,7 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         }
         
     }
-
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let identifiyCell = "Cell"
         let cell = self.tableView.dequeueReusableCellWithIdentifier(identifiyCell, forIndexPath: indexPath) as! myCell
@@ -146,7 +149,7 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         if (searchActive){
             let contacter = contacterBySearch[indexPath.row] as CNContact
             cell.textLabel?.text = "\(contacter.familyName)\(contacter.givenName)"
-          
+            
         }else{
             
             switch indexContact[indexPath.section][indexPath.item + 1] {
@@ -176,17 +179,21 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         }
         return 0
     }
-
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        var returnString: String = ""
-        if indexContact[section].count != 0{
-                returnString = self.fetchWord[section]        
     
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if searchActive {
+            return nil
+        }else{
+            var returnString: String = ""
+            if indexContact[section].count != 0{
+                returnString = self.fetchWord[section]
+                
+            }
+            return returnString
         }
-        return returnString
     }
     
-// MARK: - Navigation
+    // MARK: - Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showDetails" {
@@ -203,9 +210,9 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         }
     }
     
-// Thanks for 王巍！ 给我一些数组中写入不同类型变量的思想方式
-// MARK: - indexContacter 
-// 将索引字母与联系人构成一个二维数组
+    // Thanks for 王巍！ 给我一些数组中写入不同类型变量的思想方式
+    // MARK: - indexContacter
+    // 将索引字母与联系人构成一个二维数组
     func indexContacter() -> [[StringOrCNContact]]{
         var indexContacter = [[StringOrCNContact]]()
         for Character in fetchWord {
@@ -236,48 +243,48 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         }
         return indexContacter
     }
-
-
+    
+    
     
     /*
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    // Return false if you do not want the specified item to be editable.
+    return true
     }
     */
-
+    
     
     // Override to support editing the table view.
-   /* override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-            contacterBySearch.removeAtIndex(indexPath.row)
-            
-//            NSUserDefaults.standardUserDefaults().setObject(contacterBySearch, forKey: "Contacters")
-//            NSUserDefaults.standardUserDefaults().synchronize()
-            self.tableView.reloadData()
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+    /* override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    if editingStyle == .Delete {
+    // Delete the row from the data source
+    self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+    contacterBySearch.removeAtIndex(indexPath.row)
+    
+    //            NSUserDefaults.standardUserDefaults().setObject(contacterBySearch, forKey: "Contacters")
+    //            NSUserDefaults.standardUserDefaults().synchronize()
+    self.tableView.reloadData()
+    } else if editingStyle == .Insert {
+    // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+    }
     }*/
     
-
+    
     /*
     // Override to support rearranging the table view.
     override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
+    
     }
     */
-
+    
     /*
     // Override to support conditional rearranging of the table view.
     override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
+    // Return false if you do not want the item to be re-orderable.
+    return true
     }
     */
-
+    
     
 }
