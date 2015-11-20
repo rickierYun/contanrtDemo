@@ -23,6 +23,7 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         case CNContactValue(CNContact)
         }
     var indexContact = [[StringOrCNContact]]()
+    var copyIndexContact = [[StringOrCNContact]]()
     
     @IBOutlet weak var SearchBar: UISearchBar!
 
@@ -38,13 +39,13 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         
         if contacterBySearch.count == 0 {
             if searchText != "" {
-                contacters.removeAll()
+                indexContact.removeAll()
                 searchActive = false
             }else{                
                 searchActive = false
             }
         }else {
-            contacters.removeAll()
+            indexContact.removeAll()
             searchActive = true
         }
         self.tableView.reloadData()
@@ -52,7 +53,7 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
     
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
         searchActive = true
-        self.contacterBySearch = self.contacters
+        self.indexContact = self.copyIndexContact
         self.tableView.reloadData()
     }
     
@@ -62,13 +63,14 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
     
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
         searchActive = false
-        self.contacters = self.findContacters()
+        self.indexContact = self.copyIndexContact
         self.tableView.reloadData()
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchActive = true
     }
+    
 //MARK: - viewLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,6 +84,7 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         self.contacters = self.findContacters()
         //self.fetchWord = firstletter()
         self.indexContact = indexContacter()
+        self.copyIndexContact = self.indexContact
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -178,12 +181,16 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
     }
 
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        var returnString: String = ""
-        if indexContact[section].count != 0{
-                returnString = self.fetchWord[section]        
-    
+        if searchActive {
+            return nil
+        }else{
+            var returnString: String = ""
+            if indexContact[section].count != 0{
+                    returnString = self.fetchWord[section]        
+        
+            }
+            return returnString
         }
-        return returnString
     }
     
 // MARK: - Navigation

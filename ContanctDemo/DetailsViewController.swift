@@ -9,7 +9,7 @@
 import UIKit
 import Contacts
 
-class DetailsViewController: UIViewController {
+class DetailsViewController: UIViewController,UITableViewDelegate {
  
     @IBOutlet weak var contactImage: UIImageView!{
         didSet{
@@ -80,8 +80,28 @@ class DetailsViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 
+//MARk: - table View Data source
+//    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+//        return 1
+//    }
+//
+//    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//       return 1        
+//    }
+//
+//    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
+//        let identife = "phoneCell"
+//        let cell = tableView.dequeueReusableCellWithIdentifier(identife, forIndexPath: indexPath) as! PhoneNumberCell
+//        for number in (contact?.phoneNumbers)!{
+//            let lable = number.label
+//            let phoneNumber = number.value as! CNPhoneNumber
+//            if lable == "_$!<Home>!$_" {
+//                cell.numberLable.text = phoneNumber.stringValue
+//            }
+//        }
+//        return cell
+//    }
     /*
     // MARK: - Navigation
 
