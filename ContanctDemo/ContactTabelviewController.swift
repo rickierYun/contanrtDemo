@@ -82,9 +82,14 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
             self.detailViewController = (controller[controller.count - 1] as! UINavigationController).topViewController as? DetailsViewController
         }
         self.contacters = self.findContacters()
-        //self.fetchWord = firstletter()
-        self.indexContact = indexContacter()
-        self.copyIndexContact = self.indexContact
+        let qos = Int(QOS_CLASS_USER_INITIATED.rawValue)
+        dispatch_async(dispatch_get_global_queue(qos, 0)) { () -> Void in
+            self.indexContact = self.indexContacter()
+            dispatch_async( dispatch_get_main_queue()){
+                self.copyIndexContact = self.indexContact
+                self.tableView.reloadData()
+            }
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {

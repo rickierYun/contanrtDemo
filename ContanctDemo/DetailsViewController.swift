@@ -9,8 +9,10 @@
 import UIKit
 import Contacts
 
-class DetailsViewController: UIViewController,UITableViewDelegate {
+class DetailsViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
  
+    var phoneNumbers = [[String]]()
+
     @IBOutlet weak var contactImage: UIImageView!{
         didSet{
             //设置图片为圆形
@@ -18,24 +20,9 @@ class DetailsViewController: UIViewController,UITableViewDelegate {
             self.contactImage.clipsToBounds = true
         }
     }
+    @IBOutlet weak var tableViewForNumber: UITableView!
     
     @IBOutlet weak var contactName: UILabel!
-    @IBOutlet weak var contactPhoneNumber: UILabel!
-    @IBOutlet weak var mobile: UILabel!
-    
-    @IBAction func callPhone(sender: UIButton) {       
-        let phoneNumber = self.contactPhoneNumber.text! as String
-        let telUrl = "tel://" + "\(phoneNumber)" as String
-        let url = NSURL(string: telUrl)!
-        UIApplication.sharedApplication().openURL(url)
-    }
-   
-    @IBAction func messageButton(sender: UIButton) {
-        let messageNumber = self.contactPhoneNumber.text! as String
-        let smsNumber = "sms://" + "\(messageNumber)" as String
-        let url = NSURL(string: smsNumber)!
-        UIApplication.sharedApplication().openURL(url)
-    }
     
     var contact: CNContact? {
                 didSet{
@@ -57,22 +44,17 @@ class DetailsViewController: UIViewController,UITableViewDelegate {
                     image.image = UIImage(data: contact.imageData!)
                 }
             }
-            
-            if let phoneNumberLable = self.contactPhoneNumber{
-                for number in contact.phoneNumbers{
-                    let lable = number.label
-                    let phoneNumber = number.value as! CNPhoneNumber
-                    if lable == "_$!<Mobile>!$_" {
-                        phoneNumberLable.text = phoneNumber.stringValue
-                    }
-                }
-            }
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.fetchView()
+        if contact != nil {
+            self.tableViewForNumber.delegate = self
+            self.tableViewForNumber.dataSource = self
+            findDifNumbers()
+        }
         // Do any additional setup after loading the view.
     }
 
@@ -82,26 +64,44 @@ class DetailsViewController: UIViewController,UITableViewDelegate {
     }
 
 //MARk: - table View Data source
-//    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-//        return 1
-//    }
-//
-//    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//       return 1        
-//    }
-//
-//    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
-//        let identife = "phoneCell"
-//        let cell = tableView.dequeueReusableCellWithIdentifier(identife, forIndexPath: indexPath) as! PhoneNumberCell
-//        for number in (contact?.phoneNumbers)!{
-//            let lable = number.label
-//            let phoneNumber = number.value as! CNPhoneNumber
-//            if lable == "_$!<Home>!$_" {
-//                cell.numberLable.text = phoneNumber.stringValue
-//            }
-//        }
-//        return cell
-//    }
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return (contact?.phoneNumbers.count)!
+    }
+
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
+        let identife = "phoneCell"
+        let cell = tableView.dequeueReusableCellWithIdentifier(identife, forIndexPath: indexPath) as! PhoneNumberCell
+        if phoneNumbers.isEmpty == false{
+            if phoneNumbers[indexPath.row][indexPath.section] == "_$!<Home>!$_"{
+                cell.homeLable.text = "住宅电话"
+                cell.numberLable.text = phoneNumbers[indexPath.row][1]
+            }
+            if phoneNumbers[indexPath.row][indexPath.item] == "_$!<Mobile>!$_"{
+                cell.homeLable.text = "移动电话"
+                cell.numberLable.text = phoneNumbers[indexPath.row][1]
+
+            }
+        }
+        return cell
+    }
+    func findDifNumbers() {
+        if contact != nil{
+            for number in (contact?.phoneNumbers)! {
+                var phones = [String]()
+                let lable = number.label
+                phones.append(lable)
+                let phoneNumber = number.value as! CNPhoneNumber
+                let phoneNumberString = phoneNumber.stringValue
+                phones.append(phoneNumberString)
+                phoneNumbers.append(phones)
+                
+            }
+        }
+    }
     /*
     // MARK: - Navigation
 
