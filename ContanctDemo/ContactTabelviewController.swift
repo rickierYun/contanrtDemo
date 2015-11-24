@@ -190,9 +190,18 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
             return nil
         }else{
             var returnString: String = ""
-            if indexContact[section].count != 0{
-                    returnString = self.fetchWord[section]        
-        
+            var str : String = ""
+            switch indexContact[section][0]{
+            case let .StringValue(s):
+                str = s
+                print(str )
+            default: break
+            }
+
+            for var i = 0;i <= 25;i++ {
+                if str == self.fetchWord[i]{
+                    returnString = str
+                }
             }
             return returnString
         }
@@ -220,35 +229,41 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
 // 将索引字母与联系人构成一个二维数组
     func indexContacter() -> [[StringOrCNContact]]{
         var indexContacter = [[StringOrCNContact]]()
-        for Character in fetchWord {
-            var rowArray = [StringOrCNContact]()
-            var stringFor : NSMutableString
-            for contact in contacters {
-                //将所得到的联系人名字转换成拼音，寻找首字母
-                stringFor = NSMutableString(string: CNContactFormatter.stringFromContact(contact,style: .FullName)!)
-                if CFStringTransform(stringFor, nil, kCFStringTransformMandarinLatin, false){   //取得带音标的字符
-                    if CFStringTransform(stringFor, nil, kCFStringTransformStripDiacritics, false){ //取得不带音标的字符
-                        let topIndex : String = stringFor as String
-                        let index = topIndex.startIndex.advancedBy(1)
-                        var firstLetter : String = topIndex.substringToIndex(index)
-                        firstLetter = firstLetter.uppercaseString
-                        if Character != firstLetter && rowArray.isEmpty == false{
-                            break
-                        }else if rowArray.isEmpty && Character == firstLetter{
-                            rowArray.append(StringOrCNContact.StringValue(Character))
-                            rowArray.append(StringOrCNContact.CNContactValue(contact))
-                        }else if Character == firstLetter && rowArray.isEmpty == false{
-                            rowArray.append(StringOrCNContact.CNContactValue(contact))
+        var rowArray = [StringOrCNContact]()
+        for contact in contacters{
+            //将所得到的联系人名字转换成拼音，寻找首字母
+            let stringFor : NSMutableString = NSMutableString(string: CNContactFormatter.stringFromContact(contact, style: .FullName)!)
+            if CFStringTransform(stringFor,nil,kCFStringTransformMandarinLatin, false){//取得带音标的字符
+                if CFStringTransform(stringFor,nil,kCFStringTransformStripDiacritics, false){ //取得不带音标的字符
+                    let topIndex: String = stringFor as String
+                    let index = topIndex.startIndex.advancedBy(1)
+                    var firstLetter: String = topIndex.substringToIndex(index)
+                    firstLetter = firstLetter.uppercaseString
+                    if rowArray.isEmpty{
+                        rowArray.append(StringOrCNContact.StringValue(firstLetter))
+                        rowArray.append(StringOrCNContact.CNContactValue(contact))
+                    }else {
+                        switch rowArray[0]{
+                        case let .StringValue(s):
+                            if s == firstLetter{
+                                rowArray.append(StringOrCNContact.CNContactValue(contact))
+                            }else {
+                                indexContacter.append(rowArray)
+                                rowArray.removeAll()
+                                rowArray.append(StringOrCNContact.StringValue(firstLetter))
+                                rowArray.append(StringOrCNContact.CNContactValue(contact))
+                            }
+                        default: break
                         }
                     }
                 }
             }
-            indexContacter.append(rowArray)
             
         }
+        indexContacter.append(rowArray)
         return indexContacter
     }
-
+    
 
     
     /*
