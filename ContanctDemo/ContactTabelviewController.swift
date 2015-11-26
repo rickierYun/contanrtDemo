@@ -194,7 +194,6 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
             switch indexContact[section][0]{
             case let .StringValue(s):
                 str = s
-                print(str )
             default: break
             }
 
@@ -239,6 +238,7 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
                     let index = topIndex.startIndex.advancedBy(1)
                     var firstLetter: String = topIndex.substringToIndex(index)
                     firstLetter = firstLetter.uppercaseString
+                    firstLetter = polyphonicCharacter(contact, first: firstLetter)
                     if rowArray.isEmpty{
                         rowArray.append(StringOrCNContact.StringValue(firstLetter))
                         rowArray.append(StringOrCNContact.CNContactValue(contact))
@@ -264,6 +264,47 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         return indexContacter
     }
     
+//MARK: -- polyphonic character
+    func polyphonicCharacter(contact: CNContact, var first: String) -> String {
+        switch contact.familyName {
+        case "沈" :
+            first = "S"
+        case "乐":
+            first = "Y"
+        case "种":
+            first = "Z"
+        case "单":
+            first = "S"
+        case "解":
+            first = "X"
+        case "查":
+            first = "Z"
+        case "曾":
+            first = "Z"
+        case "区":
+            first = "O"
+        case "繁":
+            first = "P"
+        case "仇":
+            first = "C"
+        case "幺":
+            first = "Y"
+        case "折":
+            first = "S"
+        case "晁":
+            first = "C"
+        case "贾":
+            first = "J"
+        case "馮":
+            first = "F"
+        case "哈":
+            first = "H"
+        case "尾":
+            first = "W"
+        default: break
+        }
+        return first
+    }
 
     
     /*
