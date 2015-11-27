@@ -301,6 +301,26 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
             first = "H"
         case "尾":
             first = "W"
+        case "盛":
+            first = "S"
+        case "塔":
+            first = "T"
+        case "谷":
+            first = "G"
+        case "乾":
+            first = "Q"
+        case "乜":
+            first = "N"
+        case "陶":
+            first = "T"
+        case "阚":
+            first = "K"
+        case "叶":
+            first = "Y"
+        case "车":
+            first = "C"
+        case "艾":
+            first = "A"
         default: break
         }
         return first
