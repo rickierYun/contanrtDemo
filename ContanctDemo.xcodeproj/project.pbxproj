@@ -18,6 +18,7 @@
 		2F4155841BE1B8DF00215B67 /* myCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4155831BE1B8DF00215B67 /* myCell.swift */; };
 		2F7A51711BF961F000B05959 /* images.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 2F7A51701BF961F000B05959 /* images.jpeg */; };
 		2F81D1DE1BFC5BEA00538AC5 /* PhoneNumberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F81D1DD1BFC5BEA00538AC5 /* PhoneNumberCell.swift */; };
+		2F81D2221C0E8FDD00538AC5 /* firstCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F81D2211C0E8FDD00538AC5 /* firstCharacter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		2F4155831BE1B8DF00215B67 /* myCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = myCell.swift; sourceTree = "<group>"; };
 		2F7A51701BF961F000B05959 /* images.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = images.jpeg; sourceTree = "<group>"; };
 		2F81D1DD1BFC5BEA00538AC5 /* PhoneNumberCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneNumberCell.swift; sourceTree = "<group>"; };
+		2F81D2211C0E8FDD00538AC5 /* firstCharacter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = firstCharacter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +114,7 @@
 				2F81D1DD1BFC5BEA00538AC5 /* PhoneNumberCell.swift */,
 				2F41557F1BDF594E00215B67 /* DetailsViewController.swift */,
 				2F4155831BE1B8DF00215B67 /* myCell.swift */,
+				2F81D2211C0E8FDD00538AC5 /* firstCharacter.swift */,
 				2F4155541BDF477500215B67 /* Assets.xcassets */,
 				2F4155561BDF477500215B67 /* LaunchScreen.storyboard */,
 				2F4155591BDF477500215B67 /* Info.plist */,
@@ -279,6 +282,7 @@
 			files = (
 				2F41557E1BDF4AF600215B67 /* ContactTabelviewController.swift in Sources */,
 				2F4155841BE1B8DF00215B67 /* myCell.swift in Sources */,
+				2F81D2221C0E8FDD00538AC5 /* firstCharacter.swift in Sources */,
 				2F81D1DE1BFC5BEA00538AC5 /* PhoneNumberCell.swift in Sources */,
 				2F41554E1BDF477500215B67 /* AppDelegate.swift in Sources */,
 				2F4155801BDF594E00215B67 /* DetailsViewController.swift in Sources */,
