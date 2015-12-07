@@ -46,9 +46,12 @@
                                 <edgeInsets key="layoutMargins" top="8" left="100" bottom="8" right="8"/>
                             </imageView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="f2U-NM-xYA">
-                                <rect key="frame" x="20" y="221" width="560" height="177"/>
+                                <rect key="frame" x="20" y="221" width="560" height="106"/>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="106" id="IJP-1S-F6u"/>
+                                </constraints>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="phoneCell" id="tB1-p7-Nyw" customClass="PhoneNumberCell" customModule="ContanctDemo" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="560" height="44"/>
@@ -124,15 +127,14 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="BdD-Z3-76W" firstAttribute="leading" secondItem="T1p-LU-qLo" secondAttribute="leadingMargin" id="38l-ZY-5Ho"/>
-                            <constraint firstItem="x5A-yq-v2f" firstAttribute="trailing" secondItem="f2U-NM-xYA" secondAttribute="trailing" id="4GB-rb-OYO"/>
-                            <constraint firstItem="f2U-NM-xYA" firstAttribute="top" secondItem="BdD-Z3-76W" secondAttribute="bottom" constant="25" id="4ZU-6t-Y7B"/>
-                            <constraint firstItem="B9a-zi-4ox" firstAttribute="top" secondItem="f2U-NM-xYA" secondAttribute="bottom" constant="202" id="Oqh-hS-ucd"/>
+                            <constraint firstItem="f2U-NM-xYA" firstAttribute="leading" secondItem="BdD-Z3-76W" secondAttribute="leading" id="Djw-8O-LzA"/>
+                            <constraint firstItem="f2U-NM-xYA" firstAttribute="top" secondItem="BdD-Z3-76W" secondAttribute="bottom" constant="25" id="Gh5-4k-LCA"/>
                             <constraint firstItem="QAc-h4-3mU" firstAttribute="baseline" secondItem="x5A-yq-v2f" secondAttribute="firstBaseline" id="PeQ-xG-nW8"/>
-                            <constraint firstItem="f2U-NM-xYA" firstAttribute="top" secondItem="QAc-h4-3mU" secondAttribute="bottom" constant="48" id="Tv5-kN-pih"/>
                             <constraint firstItem="QAc-h4-3mU" firstAttribute="leading" secondItem="BdD-Z3-76W" secondAttribute="trailing" constant="23" id="V1s-rc-v25"/>
                             <constraint firstItem="x5A-yq-v2f" firstAttribute="baseline" secondItem="QAc-h4-3mU" secondAttribute="firstBaseline" id="WNP-2P-q2m"/>
-                            <constraint firstItem="BdD-Z3-76W" firstAttribute="leading" secondItem="f2U-NM-xYA" secondAttribute="leading" id="X9Q-zf-DxZ"/>
+                            <constraint firstItem="B9a-zi-4ox" firstAttribute="top" secondItem="f2U-NM-xYA" secondAttribute="bottom" constant="273" id="X5W-TW-oZA"/>
                             <constraint firstItem="x5A-yq-v2f" firstAttribute="trailing" secondItem="T1p-LU-qLo" secondAttribute="trailingMargin" id="ac3-A6-1pl"/>
+                            <constraint firstItem="f2U-NM-xYA" firstAttribute="trailing" secondItem="x5A-yq-v2f" secondAttribute="trailing" id="fhV-fl-e7D"/>
                             <constraint firstItem="QAc-h4-3mU" firstAttribute="baseline" secondItem="x5A-yq-v2f" secondAttribute="baseline" id="nBZ-K8-MH8"/>
                             <constraint firstItem="BdD-Z3-76W" firstAttribute="centerY" secondItem="QAc-h4-3mU" secondAttribute="centerY" id="poE-U5-gNk"/>
                             <constraint firstItem="BdD-Z3-76W" firstAttribute="top" secondItem="2yp-ry-r4g" secondAttribute="bottom" constant="66" id="xnM-cF-bkt"/>

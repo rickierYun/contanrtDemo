@@ -80,7 +80,7 @@ class DetailsViewController: UIViewController,UITableViewDelegate,UITableViewDat
                 cell.homeLable.text = "住宅电话"
                 cell.numberLable.text = phoneNumbers[indexPath.row][1]
             }
-            if phoneNumbers[indexPath.row][indexPath.item] == "_$!<Mobile>!$_"{
+            if phoneNumbers[indexPath.row][indexPath.section] == "_$!<Mobile>!$_"{
                 cell.homeLable.text = "移动电话"
                 cell.numberLable.text = phoneNumbers[indexPath.row][1]
 
