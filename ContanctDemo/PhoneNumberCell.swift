@@ -12,6 +12,7 @@ class PhoneNumberCell: UITableViewCell {
 
     @IBOutlet weak var homeLable: UILabel!
     @IBOutlet weak var numberLable: UILabel!
+    
     @IBAction func sendMessage(sender: UIButton) {
         let phoneNumber = self.numberLable.text! as String
         let telUrl = "sms://" + "\(phoneNumber)" as String

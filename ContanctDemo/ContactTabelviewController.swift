@@ -13,19 +13,95 @@ import Foundation
 import CoreFoundation
 
 class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,UISearchDisplayDelegate,UISearchBarDelegate{
+    
     var detailViewController : DetailsViewController? = nil
     var contacters = [CNContact]()
     var contacterBySearch = [CNContact]()
     var searchActive : Bool = false
     var fetchWord : [String] = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
-    enum StringOrCNContact{
-        case StringValue(String)
-        case CNContactValue(CNContact)
-        }
     var indexContact = [[StringOrCNContact]]()
     var copyIndexContact = [[StringOrCNContact]]()
     
+    enum StringOrCNContact{
+        case StringValue(String)
+        case CNContactValue(CNContact)
+    }
+    
     @IBOutlet weak var SearchBar: UISearchBar!
+    
+//MARK: - viewLoad
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.sectionIndexColor = UIColor.blackColor()
+        if let split = self.splitViewController{
+            let controller = split.viewControllers
+            self.detailViewController = (controller[controller.count - 1] as! UINavigationController).topViewController as? DetailsViewController
+        }
+        self.contacters = self.findContacters()
+        let qos = Int(QOS_CLASS_USER_INITIATED.rawValue)
+        dispatch_async(dispatch_get_global_queue(qos, 0)) { () -> Void in
+            self.indexContact = self.indexContacter()
+            dispatch_async( dispatch_get_main_queue()){
+                self.copyIndexContact = self.indexContact
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.clearsSelectionOnViewWillAppear = self.splitViewController!.collapsed
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+// Thanks for 王巍！ 给我一些数组中写入不同类型变量的思想方式
+// MARK: - indexContacter
+// 将索引字母与联系人构成一个二维数组
+    func indexContacter() -> [[StringOrCNContact]]{
+        var indexContacter = [[StringOrCNContact]]()
+        var rowArray = [StringOrCNContact]()
+        for contact in contacters{
+            //将所得到的联系人名字转换成拼音，寻找首字母
+            let stringFor : NSMutableString = NSMutableString(string: CNContactFormatter.stringFromContact(contact, style: .FullName)!)
+            if CFStringTransform(stringFor,nil,kCFStringTransformMandarinLatin, false){//取得带音标的字符
+                if CFStringTransform(stringFor,nil,kCFStringTransformStripDiacritics, false){ //取得不带音标的字符
+                    let topIndex: String = stringFor as String
+                    let index = topIndex.startIndex.advancedBy(1)
+                    var firstLetter: String = topIndex.substringToIndex(index)
+                    firstLetter = firstLetter.uppercaseString
+                    firstLetter = FirstWord.polyphonicCharacter(contact, first: firstLetter)
+                    //firstLetter = polyphonicCharacter(contact, first: firstLetter)
+                    if rowArray.isEmpty{
+                        rowArray.append(StringOrCNContact.StringValue(firstLetter))
+                        rowArray.append(StringOrCNContact.CNContactValue(contact))
+                    }else {
+                        switch rowArray[0]{
+                        case let .StringValue(s):
+                            if s == firstLetter{
+                                rowArray.append(StringOrCNContact.CNContactValue(contact))
+                            }else {
+                                indexContacter.append(rowArray)
+                                rowArray.removeAll()
+                                rowArray.append(StringOrCNContact.StringValue(firstLetter))
+                                rowArray.append(StringOrCNContact.CNContactValue(contact))
+                            }
+                        default: break
+                        }
+                    }
+                }
+            }
+            
+        }
+        indexContacter.append(rowArray)
+        return indexContacter
+    }
+    
 
 //MARK: - searchBar
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
@@ -69,37 +145,6 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchActive = true
-    }
-    
-//MARK: - viewLoad
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.sectionIndexColor = UIColor.blackColor()
-        if let split = self.splitViewController{
-            let controller = split.viewControllers
-            self.detailViewController = (controller[controller.count - 1] as! UINavigationController).topViewController as? DetailsViewController
-        }
-        self.contacters = self.findContacters()
-        let qos = Int(QOS_CLASS_USER_INITIATED.rawValue)
-        dispatch_async(dispatch_get_global_queue(qos, 0)) { () -> Void in
-            self.indexContact = self.indexContacter()
-            dispatch_async( dispatch_get_main_queue()){
-                self.copyIndexContact = self.indexContact
-                self.tableView.reloadData()
-            }
-        }
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillAppear(animated)
-        self.clearsSelectionOnViewWillAppear = self.splitViewController!.collapsed
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
 // MARK: - findContacters
@@ -222,89 +267,5 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
             }
         }
     }
-    
-// Thanks for 王巍！ 给我一些数组中写入不同类型变量的思想方式
-// MARK: - indexContacter 
-// 将索引字母与联系人构成一个二维数组
-    func indexContacter() -> [[StringOrCNContact]]{
-        var indexContacter = [[StringOrCNContact]]()
-        var rowArray = [StringOrCNContact]()
-        for contact in contacters{
-            //将所得到的联系人名字转换成拼音，寻找首字母
-            let stringFor : NSMutableString = NSMutableString(string: CNContactFormatter.stringFromContact(contact, style: .FullName)!)
-            if CFStringTransform(stringFor,nil,kCFStringTransformMandarinLatin, false){//取得带音标的字符
-                if CFStringTransform(stringFor,nil,kCFStringTransformStripDiacritics, false){ //取得不带音标的字符
-                    let topIndex: String = stringFor as String
-                    let index = topIndex.startIndex.advancedBy(1)
-                    var firstLetter: String = topIndex.substringToIndex(index)
-                    firstLetter = firstLetter.uppercaseString
-                    firstLetter = FirstWord.polyphonicCharacter(contact, first: firstLetter)
-                    //firstLetter = polyphonicCharacter(contact, first: firstLetter)
-                    if rowArray.isEmpty{
-                        rowArray.append(StringOrCNContact.StringValue(firstLetter))
-                        rowArray.append(StringOrCNContact.CNContactValue(contact))
-                    }else {
-                        switch rowArray[0]{
-                        case let .StringValue(s):
-                            if s == firstLetter{
-                                rowArray.append(StringOrCNContact.CNContactValue(contact))
-                            }else {
-                                indexContacter.append(rowArray)
-                                rowArray.removeAll()
-                                rowArray.append(StringOrCNContact.StringValue(firstLetter))
-                                rowArray.append(StringOrCNContact.CNContactValue(contact))
-                            }
-                        default: break
-                        }
-                    }
-                }
-            }
-            
-        }
-        indexContacter.append(rowArray)
-        return indexContacter
-    }
-    
-   
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    
-    // Override to support editing the table view.
-   /* override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-            contacterBySearch.removeAtIndex(indexPath.row)
-            
-//            NSUserDefaults.standardUserDefaults().setObject(contacterBySearch, forKey: "Contacters")
-//            NSUserDefaults.standardUserDefaults().synchronize()
-            self.tableView.reloadData()
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }*/
-    
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
     
 }

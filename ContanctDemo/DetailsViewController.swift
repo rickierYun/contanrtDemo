@@ -12,6 +12,12 @@ import Contacts
 class DetailsViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
  
     var phoneNumbers = [[String]]()
+    var contact: CNContact? {
+        didSet{
+            self.fetchView()
+        }
+        
+    }
 
     @IBOutlet weak var contactImage: UIImageView!{
         didSet{
@@ -20,17 +26,26 @@ class DetailsViewController: UIViewController,UITableViewDelegate,UITableViewDat
             self.contactImage.clipsToBounds = true
         }
     }
+    
     @IBOutlet weak var tableViewForNumber: UITableView!
-    
     @IBOutlet weak var contactName: UILabel!
-    
-    var contact: CNContact? {
-                didSet{
-            self.fetchView()
-        }
         
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.fetchView()
+        if contact != nil {
+            self.tableViewForNumber.delegate = self
+            self.tableViewForNumber.dataSource = self
+            findDifNumbers()
+        }
+        // Do any additional setup after loading the view.
     }
     
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
 //MARK: - fetchView
     func fetchView()
     {
@@ -47,22 +62,7 @@ class DetailsViewController: UIViewController,UITableViewDelegate,UITableViewDat
         }
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.fetchView()
-        if contact != nil {
-            self.tableViewForNumber.delegate = self
-            self.tableViewForNumber.dataSource = self
-            findDifNumbers()
-        }
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
+   
 //MARk: - table View Data source
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
@@ -102,14 +102,5 @@ class DetailsViewController: UIViewController,UITableViewDelegate,UITableViewDat
             }
         }
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+  
 }
