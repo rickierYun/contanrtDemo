@@ -76,15 +76,30 @@ class DetailsViewController: UIViewController,UITableViewDelegate,UITableViewDat
         let identife = "phoneCell"
         let cell = tableView.dequeueReusableCellWithIdentifier(identife, forIndexPath: indexPath) as! PhoneNumberCell
         if phoneNumbers.isEmpty == false{
-            if phoneNumbers[indexPath.row][indexPath.section] == "_$!<Home>!$_"{
+            print(phoneNumbers[indexPath.row][indexPath.section])
+            switch phoneNumbers[indexPath.row][indexPath.section] {
+            case "_$!<Home>!$_" :
                 cell.homeLable.text = "住宅电话"
                 cell.numberLable.text = phoneNumbers[indexPath.row][1]
-            }
-            if phoneNumbers[indexPath.row][indexPath.section] == "_$!<Mobile>!$_"{
+            case "_$!<Mobile>!$_":
                 cell.homeLable.text = "移动电话"
                 cell.numberLable.text = phoneNumbers[indexPath.row][1]
-
+            case "iPhone":
+                cell.homeLable.text = "iPhone"
+                cell.numberLable.text = phoneNumbers[indexPath.row][1]
+            case "_$!<Other>!$_":
+                cell.homeLable.text = "其他"
+                cell.numberLable.text = phoneNumbers[indexPath.row][1]
+            default :break
             }
+            
+//            if phoneNumbers[indexPath.row][indexPath.section] == "_$!<Home>!$_"{
+//
+//            }
+//            if phoneNumbers[indexPath.row][indexPath.section] == {
+//
+//
+//            }
         }
         return cell
     }
