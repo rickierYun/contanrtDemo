@@ -8,36 +8,25 @@
 
 import UIKit
 import Contacts
+import ContactsUI
 
-class DetailsViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
+class DetailsViewController: UIViewController,UITableViewDelegate,CNContactViewControllerDelegate {
  
-    var phoneNumbers = [[String]]()
+    private var store = CNContactStore()
     var contact: CNContact? {
         didSet{
             self.fetchView()
         }
         
     }
-
-    @IBOutlet weak var contactImage: UIImageView!{
-        didSet{
-            //设置图片为圆形
-            self.contactImage.layer.cornerRadius = self.contactImage.frame.size.width / 2
-            self.contactImage.clipsToBounds = true
-        }
-    }
-    
-    @IBOutlet weak var tableViewForNumber: UITableView!
-    @IBOutlet weak var contactName: UILabel!
-        
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.fetchView()
         if contact != nil {
-            self.tableViewForNumber.delegate = self
-            self.tableViewForNumber.dataSource = self
-            findDifNumbers()
+            showContactViewController()
         }
+        
         // Do any additional setup after loading the view.
     }
     
@@ -49,72 +38,36 @@ class DetailsViewController: UIViewController,UITableViewDelegate,UITableViewDat
 //MARK: - fetchView
     func fetchView()
     {
-        if let contact = self.contact{
-            if let lable = self.contactName{
-                lable.text = CNContactFormatter.stringFromContact(contact, style: .FullName)
-            }
-            
-            if let image = self.contactImage{
-                if contact.imageData != nil{
-                    image.image = UIImage(data: contact.imageData!)
-                }
-            }
-        }
+        _ = self.contact
     }
     
-   
-//MARk: - table View Data source
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (contact?.phoneNumbers.count)!
-    }
-
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
-        let identife = "phoneCell"
-        let cell = tableView.dequeueReusableCellWithIdentifier(identife, forIndexPath: indexPath) as! PhoneNumberCell
-        if phoneNumbers.isEmpty == false{
-            print(phoneNumbers[indexPath.row][indexPath.section])
-            switch phoneNumbers[indexPath.row][indexPath.section] {
-            case "_$!<Home>!$_" :
-                cell.homeLable.text = "住宅电话"
-                cell.numberLable.text = phoneNumbers[indexPath.row][1]
-            case "_$!<Mobile>!$_":
-                cell.homeLable.text = "移动电话"
-                cell.numberLable.text = phoneNumbers[indexPath.row][1]
-            case "iPhone":
-                cell.homeLable.text = "iPhone"
-                cell.numberLable.text = phoneNumbers[indexPath.row][1]
-            case "_$!<Other>!$_":
-                cell.homeLable.text = "其他"
-                cell.numberLable.text = phoneNumbers[indexPath.row][1]
-            default :break
-            }
-            
-//            if phoneNumbers[indexPath.row][indexPath.section] == "_$!<Home>!$_"{
-//
-//            }
-//            if phoneNumbers[indexPath.row][indexPath.section] == {
-//
-//
-//            }
+    private func showContactViewController() {
+        // Search for the person named "Appleseed" in the Contacts
+        let name = contact?.familyName
+        let predicate: NSPredicate = CNContact.predicateForContactsMatchingName(name!)
+        let descriptor = CNContactViewController.descriptorForRequiredKeys()
+        let contacts: [CNContact]
+        do {
+            contacts = try store.unifiedContactsMatchingPredicate(predicate, keysToFetch: [descriptor])
+        } catch {
+            contacts = []
         }
-        return cell
-    }
-    func findDifNumbers() {
-        if contact != nil{
-            for number in (contact?.phoneNumbers)! {
-                var phones = [String]()
-                let lable = number.label
-                phones.append(lable)
-                let phoneNumber = number.value as! CNPhoneNumber
-                let phoneNumberString = phoneNumber.stringValue
-                phones.append(phoneNumberString)
-                phoneNumbers.append(phones)
-                
-            }
+        // Display "Contact" information if found in the address book
+        if !contacts.isEmpty {
+            let contact = contacts[0]
+            let cvc = CNContactViewController(forContact: contact)
+            cvc.delegate = self
+            // Allow users to edit the person’s information
+            cvc.allowsEditing = true
+            //cvc.contactStore = self.store //seems to work without setting this.
+            self.navigationController?.pushViewController(cvc, animated: true)
+        } else {
+            // Show an alert if Contact" is not in Contacts
+            let alert = UIAlertController(title: "Error",
+                message: "Could not find \(name) in the Contacts application.",
+                preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
         }
     }
   

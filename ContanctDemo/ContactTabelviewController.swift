@@ -12,7 +12,10 @@ import ContactsUI
 import Foundation
 import CoreFoundation
 
-class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,UISearchDisplayDelegate,UISearchBarDelegate{
+class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,UISearchDisplayDelegate,UISearchBarDelegate,CNContactViewControllerDelegate{
+    
+    var contactDetails = CNContact()
+    private var store = CNContactStore()
     
     var detailViewController : DetailsViewController? = nil
     var contacters = [CNContact]()
@@ -29,6 +32,12 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
     
     @IBOutlet weak var SearchBar: UISearchBar!
     
+    @IBAction func addContact(sender: UIBarButtonItem) {
+        let newContact = CNContactViewController(forNewContact: nil)
+        newContact.delegate = self
+        let nagivtion = UINavigationController(rootViewController: newContact)
+        self.presentViewController(nagivtion, animated: true, completion: nil)
+    }
 //MARK: - viewLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -147,6 +156,21 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         searchActive = true
     }
     
+//MARK: CNContactViewControllerDelegate methods
+    func contactViewController(viewController: CNContactViewController, didCompleteWithContact contact: CNContact?) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+        self.contacters = self.findContacters()
+        let qos = Int(QOS_CLASS_USER_INITIATED.rawValue)
+        dispatch_async(dispatch_get_global_queue(qos, 0)) { () -> Void in
+            self.indexContact = self.indexContacter()
+            dispatch_async( dispatch_get_main_queue()){
+                self.copyIndexContact = self.indexContact
+                self.tableView.reloadData()
+            }
+        }
+
+    }
+    
 // MARK: - findContacters
     func findContacters() ->[CNContact]{
         let store = CNContactStore()
@@ -229,7 +253,15 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
         }
         return 0
     }
-
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        switch indexContact[indexPath.section][indexPath.item + 1]{
+        case  let .CNContactValue(s):
+            showContactViewController(s)
+        default: break
+        }
+    }
+    
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if searchActive {
             return nil
@@ -253,19 +285,48 @@ class ContactTabelviewController: UITableViewController,CNContactPickerDelegate,
     
 // MARK: - Navigation
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "showDetails" {
-            if let indexPath = self.tableView.indexPathForSelectedRow {
-                switch indexContact[indexPath.section][indexPath.item + 1] {
-                case let .CNContactValue(s):
-                    let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailsViewController
-                    controller.contact = s
-                    controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
-                    controller.navigationItem.leftItemsSupplementBackButton = true
-                default:break
-                }
-            }
+//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+//        if segue.identifier == "showDetails" {
+//            if let indexPath = self.tableView.indexPathForSelectedRow {
+//                switch indexContact[indexPath.section][indexPath.item + 1] {
+//                case let .CNContactValue(s):
+//                    let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailsViewController
+//                    controller.contact = s
+//                    controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+//                    controller.navigationItem.leftItemsSupplementBackButton = true
+//                default:break
+//                }
+//            }
+//        }
+//    }
+    private func showContactViewController(s: CNContact) {
+        // Search for the person named "Appleseed" in the Contacts
+        let name = s.familyName
+        let predicate: NSPredicate = CNContact.predicateForContactsMatchingName(name)
+        let descriptor = CNContactViewController.descriptorForRequiredKeys()
+        let contacts: [CNContact]
+        do {
+            contacts = try store.unifiedContactsMatchingPredicate(predicate, keysToFetch: [descriptor])
+        } catch {
+            contacts = []
+        }
+        // Display "Appleseed" information if found in the address book
+        if !contacts.isEmpty {
+            let contact = contacts[0]
+            let cvc = CNContactViewController(forContact: contact)
+            cvc.delegate = self
+            // Allow users to edit the person’s information
+            cvc.allowsEditing = true
+            //cvc.contactStore = self.store //seems to work without setting this.
+            self.navigationController?.pushViewController(cvc, animated: true)
+        } else {
+            // Show an alert if "Appleseed" is not in Contacts
+            let alert = UIAlertController(title: "Error",
+                message: "Could not find \(name) in the Contacts application.",
+                preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
         }
     }
-    
+
 }
