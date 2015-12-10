@@ -71,6 +71,7 @@
                         <outlet property="SearchBar" destination="4LC-IT-RMi" id="6bm-6B-N13"/>
                         <outlet property="searchDisplayController" destination="jsz-fu-W6K" id="PeN-Nl-Wff"/>
                         <outlet property="tableView" destination="1mo-Rp-iMQ" id="f0i-yT-WjO"/>
+                        <segue destination="Ai6-SD-rZb" kind="showDetail" identifier="showDetails" id="efO-B4-rgH"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hex-u0-QBF" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -136,4 +137,7 @@
             <point key="canvasLocation" x="-22" y="108"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="efO-B4-rgH"/>
+    </inferredMetricsTieBreakers>
 </document>
